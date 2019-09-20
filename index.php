@@ -5,6 +5,7 @@
 use Kirby\Toolkit\Tpl;
 use Kirby\Cms\Template;
 use Kirby\Cms\App as Kirby;
+use voku\helper\HtmlMin;
 
 class MinifyHTML extends Template
 {
@@ -12,27 +13,29 @@ class MinifyHTML extends Template
     {
         $html = Tpl::load($this->file(), $data);
 
-        $search = array(
-            '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
-            '/[^\S ]+\</s',     // strip whitespaces before tags, except space
-            '/(\s)+/s',         // shorten multiple whitespace sequences
-            '/<!--(.|\s)*?-->/' // Remove HTML comments
-        );
+        if (option('afbora.kirby-minify-html.enabled') === true) {
+            $htmlMin = new HtmlMin();
 
-        $replace = array(
-            '>',
-            '<',
-            '\\1',
-            ''
-        );
+            $options = option('afbora.kirby-minify-html.options', []);
 
-        $html = preg_replace($search, $replace, $html);
+            foreach ($options as $option => $status) {
+                if (method_exists($htmlMin, $option)) {
+                    $htmlMin->{$option}((bool)$status);
+                }
+            }
+
+            return $htmlMin->minify($html);
+        }
 
         return $html;
     }
 }
 
 Kirby::plugin('afbora/kirby-minify-html', [
+    'options' => [
+        'enabled' => true,
+        'options' => []
+    ],
     'components' => [
         'template' => function (Kirby $kirby, string $name, string $contentType = null) {
             return new MinifyHTML($name, $contentType);
