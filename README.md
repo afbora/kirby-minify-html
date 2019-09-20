@@ -13,7 +13,7 @@ composer require afbora/kirby-minify-html
 ### Add as git submodule
 
 ```ssh
-git submodule add https://github.com/afbora/kirby-loader.git site/plugins/kirby-minify-html
+git submodule add https://github.com/afbora/kirby-minify-html.git site/plugins/kirby-minify-html
 ```
 
 ## Options
