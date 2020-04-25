@@ -28,7 +28,7 @@ The default values of the package are:
 ### Available Minify Options
 
 | Option | Description |
-|:--|:--|
+|:---|:---|
 | doOptimizeViaHtmlDomParser | optimize html via "HtmlDomParser()" |
 | doRemoveComments | remove default HTML comments (depends on "doOptimizeViaHtmlDomParser(true)") |
 | doSumUpWhitespace | sum-up extra whitespace from the Dom (depends on "doOptimizeViaHtmlDomParser(true)") |
@@ -52,6 +52,10 @@ All the values can be updated in the `config.php` file.
 
 You can get detailed information from `HtmlMin` library:
 https://github.com/voku/HtmlMin#options
+
+##### Protected HTML
+
+*Inline css, inline js, conditional comments are still protected, no matter what settings you use.*
 
 ## Usage
 

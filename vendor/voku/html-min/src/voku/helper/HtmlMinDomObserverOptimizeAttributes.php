@@ -15,7 +15,9 @@ final class HtmlMinDomObserverOptimizeAttributes implements HtmlMinDomObserverIn
      * // https://mathiasbynens.be/demo/javascript-mime-type
      * // https://developer.mozilla.org/en/docs/Web/HTML/Element/script#attr-type
      *
-     * @var array
+     * @var string[]
+     *
+     * @psalm-var array<string, string>
      */
     private static $executableScriptsMimeTypes = [
         'text/javascript'          => '',
@@ -30,7 +32,9 @@ final class HtmlMinDomObserverOptimizeAttributes implements HtmlMinDomObserverIn
      * Receive dom elements before the minification.
      *
      * @param SimpleHtmlDomInterface $element
-     * @param HtmlMinInterface                $htmlMin
+     * @param HtmlMinInterface       $htmlMin
+     *
+     * @return void
      */
     public function domElementBeforeMinification(SimpleHtmlDomInterface $element, HtmlMinInterface $htmlMin)
     {
@@ -40,7 +44,9 @@ final class HtmlMinDomObserverOptimizeAttributes implements HtmlMinDomObserverIn
      * Receive dom elements after the minification.
      *
      * @param SimpleHtmlDomInterface $element
-     * @param HtmlMinInterface                $htmlMin
+     * @param HtmlMinInterface       $htmlMin
+     *
+     * @return void
      */
     public function domElementAfterMinification(SimpleHtmlDomInterface $element, HtmlMinInterface $htmlMin)
     {
@@ -49,28 +55,79 @@ final class HtmlMinDomObserverOptimizeAttributes implements HtmlMinDomObserverIn
             return;
         }
 
+        $tagName = $element->getNode()->nodeName;
         $attrs = [];
         foreach ((array) $attributes as $attrName => $attrValue) {
+
+            // -------------------------------------------------------------------------
+            // Remove local domains from attributes.
+            // -------------------------------------------------------------------------
+
+            if ($htmlMin->isDoMakeSameDomainsLinksRelative()) {
+                $localDomains = $htmlMin->getLocalDomains();
+                foreach ($localDomains as $localDomain) {
+                    /** @noinspection InArrayCanBeUsedInspection */
+                    if (
+                        (
+                            $attrName === 'href'
+                            ||
+                            $attrName === 'src'
+                            ||
+                            $attrName === 'srcset'
+                            ||
+                            $attrName === 'action'
+                        )
+                        &&
+                        !(isset($attributes['rel']) && $attributes['rel'] === 'external')
+                        &&
+                        !(isset($attributes['target']) && $attributes['target'] === '_blank')
+                        &&
+                        \stripos($attrValue, $localDomain) !== false
+                    ) {
+                        $localDomainEscaped = \preg_quote($localDomain, '/');
+
+                        $attrValue = (string) \preg_replace("/^(?:(?:https?:)?\/\/)?{$localDomainEscaped}(?!\w)(?:\/?)/i", '/', $attrValue);
+                    }
+                }
+            }
 
             // -------------------------------------------------------------------------
             // Remove optional "http:"-prefix from attributes.
             // -------------------------------------------------------------------------
 
             if ($htmlMin->isDoRemoveHttpPrefixFromAttributes()) {
-                /** @noinspection InArrayCanBeUsedInspection */
-                /** @noinspection NestedPositiveIfStatementsInspection */
-                if (
-                    ($attrName === 'href' || $attrName === 'src' || $attrName === 'action')
-                    &&
-                    !(isset($attributes['rel']) && $attributes['rel'] === 'external')
-                    &&
-                    !(isset($attributes['target']) && $attributes['target'] === '_blank')
-                ) {
-                    $attrValue = \str_replace('http://', '//', $attrValue);
-                }
+                $attrValue = $this->removeUrlSchemeHelper(
+                    $attrValue,
+                    $attrName,
+                    'http',
+                    $attributes,
+                    $tagName,
+                    $htmlMin
+                );
             }
 
-            if ($this->removeAttributeHelper($element->tag, $attrName, $attrValue, $attributes, $htmlMin)) {
+            if ($htmlMin->isDoRemoveHttpsPrefixFromAttributes()) {
+                $attrValue = $this->removeUrlSchemeHelper(
+                    $attrValue,
+                    $attrName,
+                    'https',
+                    $attributes,
+                    $tagName,
+                    $htmlMin
+                );
+            }
+
+            // -------------------------------------------------------------------------
+            // Remove some special attributes.
+            // -------------------------------------------------------------------------
+
+            if ($this->removeAttributeHelper(
+                $element->tag,
+                $attrName,
+                $attrValue,
+                $attributes,
+                $htmlMin
+            )) {
                 $element->{$attrName} = null;
 
                 continue;
@@ -98,7 +155,7 @@ final class HtmlMinDomObserverOptimizeAttributes implements HtmlMinDomObserverIn
             \ksort($attrs);
             foreach ($attrs as $attrName => $attrValue) {
                 $attrValue = HtmlDomParser::replaceToPreserveHtmlEntities($attrValue);
-                $element->setAttribute((string)$attrName, $attrValue, true);
+                $element->setAttribute((string) $attrName, $attrValue, true);
             }
         }
     }
@@ -106,10 +163,10 @@ final class HtmlMinDomObserverOptimizeAttributes implements HtmlMinDomObserverIn
     /**
      * Check if the attribute can be removed.
      *
-     * @param string  $tag
-     * @param string  $attrName
-     * @param string  $attrValue
-     * @param array   $allAttr
+     * @param string           $tag
+     * @param string           $attrName
+     * @param string           $attrValue
+     * @param array            $allAttr
      * @param HtmlMinInterface $htmlMin
      *
      * @return bool
@@ -126,11 +183,47 @@ final class HtmlMinDomObserverOptimizeAttributes implements HtmlMinDomObserverIn
                 return true;
             }
 
+            if ($tag === 'form' && $attrName === 'autocomplete' && $attrValue === 'on') {
+                return true;
+            }
+
+            if ($tag === 'form' && $attrName === 'enctype' && $attrValue === 'application/x-www-form-urlencoded') {
+                return true;
+            }
+
             if ($tag === 'input' && $attrName === 'type' && $attrValue === 'text') {
                 return true;
             }
 
+            if ($tag === 'textarea' && $attrName === 'wrap' && $attrValue === 'soft') {
+                return true;
+            }
+
             if ($tag === 'area' && $attrName === 'shape' && $attrValue === 'rect') {
+                return true;
+            }
+
+            if ($tag === 'th' && $attrName === 'scope' && $attrValue === 'auto') {
+                return true;
+            }
+
+            if ($tag === 'ol' && $attrName === 'type' && $attrValue === 'decimal') {
+                return true;
+            }
+
+            if ($tag === 'ol' && $attrName === 'start' && $attrValue === '1') {
+                return true;
+            }
+
+            if ($tag === 'track' && $attrName === 'kind' && $attrValue === 'subtitles') {
+                return true;
+            }
+
+            if ($attrName === 'spellcheck' && $attrValue === 'default') {
+                return true;
+            }
+
+            if ($attrName === 'draggable' && $attrValue === 'auto') {
                 return true;
             }
         }
@@ -151,10 +244,24 @@ final class HtmlMinDomObserverOptimizeAttributes implements HtmlMinDomObserverIn
             }
         }
 
-        // remove "type=text/css" for css links
+        if ($htmlMin->isDoRemoveDefaultMediaTypeFromStyleAndLinkTag()) {
+            /** @noinspection NestedPositiveIfStatementsInspection */
+            if (($tag === 'link' || $tag === 'style') && $attrName === 'media' && $attrValue === 'all') {
+                return true;
+            }
+        }
+
+        // remove "type=text/css" for css "stylesheet"-links
         if ($htmlMin->isDoRemoveDeprecatedTypeFromStylesheetLink()) {
             /** @noinspection NestedPositiveIfStatementsInspection */
-            if ($tag === 'link' && $attrName === 'type' && $attrValue === 'text/css' && isset($allAttr['rel']) && $allAttr['rel'] === 'stylesheet') {
+            if ($tag === 'link' && $attrName === 'type' && $attrValue === 'text/css' && isset($allAttr['rel']) && $allAttr['rel'] === 'stylesheet' && $htmlMin->isXHTML() === false && $htmlMin->isHTML4() === false) {
+                return true;
+            }
+        }
+        // remove deprecated css-mime-types
+        if ($htmlMin->isDoRemoveDeprecatedTypeFromStyleAndLinkTag()) {
+            /** @noinspection NestedPositiveIfStatementsInspection */
+            if (($tag === 'link' || $tag === 'style') && $attrName === 'type' && $attrValue === 'text/css' && $htmlMin->isXHTML() === false && $htmlMin->isHTML4() === false) {
                 return true;
             }
         }
@@ -162,7 +269,15 @@ final class HtmlMinDomObserverOptimizeAttributes implements HtmlMinDomObserverIn
         // remove deprecated script-mime-types
         if ($htmlMin->isDoRemoveDeprecatedTypeFromScriptTag()) {
             /** @noinspection NestedPositiveIfStatementsInspection */
-            if ($tag === 'script' && $attrName === 'type' && isset($allAttr['src'], self::$executableScriptsMimeTypes[$attrValue])) {
+            if ($tag === 'script' && $attrName === 'type' && isset(self::$executableScriptsMimeTypes[$attrValue]) && $htmlMin->isXHTML() === false && $htmlMin->isHTML4() === false) {
+                return true;
+            }
+        }
+
+        // remove 'type=submit' from <button type="submit">
+        if ($htmlMin->isDoRemoveDefaultTypeFromButton()) {
+            /** @noinspection NestedPositiveIfStatementsInspection */
+            if ($tag === 'button' && $attrName === 'type' && $attrValue === 'submit') {
                 return true;
             }
         }
@@ -184,6 +299,56 @@ final class HtmlMinDomObserverOptimizeAttributes implements HtmlMinDomObserverIn
         }
 
         return false;
+    }
+
+    /**
+     * @param string           $attrValue
+     * @param string           $attrName
+     * @param string           $scheme
+     * @param string[]         $attributes
+     * @param string           $tagName
+     * @param HtmlMinInterface $htmlMin
+     *
+     * @return string
+     *
+     * @noinspection PhpTooManyParametersInspection
+     */
+    private function removeUrlSchemeHelper(
+        string $attrValue,
+        string $attrName,
+        string $scheme,
+        array $attributes,
+        string $tagName,
+        HtmlMinInterface $htmlMin
+    ): string {
+        /** @noinspection InArrayCanBeUsedInspection */
+        if (
+            !(isset($attributes['rel']) && $attributes['rel'] === 'external')
+            &&
+            !(isset($attributes['target']) && $attributes['target'] === '_blank')
+            &&
+            (
+                (
+                    $attrName === 'href'
+                    &&
+                    (
+                        !$htmlMin->isdoKeepHttpAndHttpsPrefixOnExternalAttributes()
+                        ||
+                        $tagName === 'link'
+                    )
+                )
+                ||
+                $attrName === 'src'
+                ||
+                $attrName === 'srcset'
+                ||
+                $attrName === 'action'
+            )
+        ) {
+            $attrValue = \str_replace($scheme . '://', '//', $attrValue);
+        }
+
+        return $attrValue;
     }
 
     /**

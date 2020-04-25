@@ -186,7 +186,7 @@ class XmlDomParser extends AbstractDomParser
      * @param string   $selector
      * @param int|null $idx
      *
-     * @return SimpleXmlDomInterface|SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface
+     * @return SimpleXmlDomInterface|SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface<SimpleXmlDomInterface>
      */
     public function find(string $selector, $idx = null)
     {
@@ -196,8 +196,10 @@ class XmlDomParser extends AbstractDomParser
         $nodesList = $xPath->query($xPathQuery);
         $elements = new SimpleXmlDomNode();
 
-        foreach ($nodesList as $node) {
-            $elements[] = new SimpleXmlDom($node);
+        if ($nodesList) {
+            foreach ($nodesList as $node) {
+                $elements[] = new SimpleXmlDom($node);
+            }
         }
 
         // return all elements
@@ -223,7 +225,7 @@ class XmlDomParser extends AbstractDomParser
      *
      * @param string $selector
      *
-     * @return SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface
+     * @return SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface<SimpleXmlDomInterface>
      */
     public function findMulti(string $selector): SimpleXmlDomNodeInterface
     {
@@ -235,7 +237,7 @@ class XmlDomParser extends AbstractDomParser
      *
      * @param string $selector
      *
-     * @return false|SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface
+     * @return false|SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface<SimpleXmlDomInterface>
      */
     public function findMultiOrFalse(string $selector)
     {
@@ -296,7 +298,7 @@ class XmlDomParser extends AbstractDomParser
      *
      * @param string $class
      *
-     * @return SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface
+     * @return SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface<SimpleXmlDomInterface>
      */
     public function getElementByClass(string $class): SimpleXmlDomNodeInterface
     {
@@ -339,7 +341,7 @@ class XmlDomParser extends AbstractDomParser
      * @param string   $id
      * @param int|null $idx
      *
-     * @return SimpleXmlDomInterface|SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface
+     * @return SimpleXmlDomInterface|SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface<SimpleXmlDomInterface>
      */
     public function getElementsById(string $id, $idx = null)
     {
@@ -352,7 +354,7 @@ class XmlDomParser extends AbstractDomParser
      * @param string   $name
      * @param int|null $idx
      *
-     * @return SimpleXmlDomInterface|SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface
+     * @return SimpleXmlDomInterface|SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface<SimpleXmlDomInterface>
      */
     public function getElementsByTagName(string $name, $idx = null)
     {
@@ -391,8 +393,8 @@ class XmlDomParser extends AbstractDomParser
      */
     public function html(bool $multiDecodeNewHtmlEntity = false): string
     {
-        if ($this::$callback !== null) {
-            \call_user_func($this::$callback, [$this]);
+        if (static::$callback !== null) {
+            \call_user_func(static::$callback, [$this]);
         }
 
         $content = $this->document->saveHTML();
@@ -461,7 +463,7 @@ class XmlDomParser extends AbstractDomParser
      * @param string $selector
      * @param int    $idx
      *
-     * @return SimpleXmlDomInterface|SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface
+     * @return SimpleXmlDomInterface|SimpleXmlDomInterface[]|SimpleXmlDomNodeInterface<SimpleXmlDomInterface>
      */
     public function __invoke($selector, $idx = null)
     {
@@ -524,6 +526,8 @@ class XmlDomParser extends AbstractDomParser
     /**
      * @param callable      $callback
      * @param \DOMNode|null $domNode
+     *
+     * @return void
      */
     public function replaceTextWithCallback($callback, \DOMNode $domNode = null)
     {
@@ -541,6 +545,10 @@ class XmlDomParser extends AbstractDomParser
 
             foreach ($children as $child) {
                 if ($child->nodeType === \XML_TEXT_NODE) {
+                    /** @noinspection PhpSillyAssignmentInspection */
+                    /** @var \DOMText $child */
+                    $child = $child;
+
                     $oldText = self::putReplacedBackToPreserveHtmlEntities($child->wholeText);
                     $newText = $callback($oldText);
                     if ($domNode->ownerDocument) {

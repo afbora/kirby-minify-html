@@ -45,6 +45,21 @@ interface HtmlMinInterface
     /**
      * @return bool
      */
+    public function isDoRemoveDeprecatedTypeFromStyleAndLinkTag(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isDoRemoveDefaultMediaTypeFromStyleAndLinkTag(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isDoRemoveDefaultTypeFromButton(): bool;
+
+    /**
+     * @return bool
+     */
     public function isDoRemoveDeprecatedTypeFromScriptTag(): bool;
 
     /**
@@ -101,6 +116,36 @@ interface HtmlMinInterface
      * @return bool
      */
     public function isDoRemoveHttpPrefixFromAttributes(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isDoRemoveHttpsPrefixFromAttributes(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isdoKeepHttpAndHttpsPrefixOnExternalAttributes(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isDoMakeSameDomainsLinksRelative(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isHTML4(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isXHTML(): bool;
+
+    /**
+     * @return string[]
+     */
+    public function getLocalDomains(): array;
 
     /**
      * @return array

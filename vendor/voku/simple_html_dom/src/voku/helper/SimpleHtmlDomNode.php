@@ -15,7 +15,7 @@ class SimpleHtmlDomNode extends AbstractSimpleHtmlDomNode implements SimpleHtmlD
      * @param string   $selector
      * @param int|null $idx
      *
-     * @return SimpleHtmlDomNodeInterface|SimpleHtmlDomNodeInterface[]|null
+     * @return SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>|SimpleHtmlDomNodeInterface[]|null
      */
     public function find(string $selector, $idx = null)
     {
@@ -23,8 +23,9 @@ class SimpleHtmlDomNode extends AbstractSimpleHtmlDomNode implements SimpleHtmlD
         $elements = new static();
 
         foreach ($this as $node) {
+            \assert($node instanceof SimpleHtmlDomInterface);
             foreach ($node->find($selector) as $res) {
-                $elements->append($res);
+                $elements[] = $res;
             }
         }
 
@@ -51,7 +52,7 @@ class SimpleHtmlDomNode extends AbstractSimpleHtmlDomNode implements SimpleHtmlD
      *
      * @param string $selector
      *
-     * @return SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface
+     * @return SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      */
     public function findMulti(string $selector): SimpleHtmlDomNodeInterface
     {
@@ -63,7 +64,7 @@ class SimpleHtmlDomNode extends AbstractSimpleHtmlDomNode implements SimpleHtmlD
      *
      * @param string $selector
      *
-     * @return false|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface
+     * @return false|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      */
     public function findMultiOrFalse(string $selector)
     {
@@ -81,7 +82,7 @@ class SimpleHtmlDomNode extends AbstractSimpleHtmlDomNode implements SimpleHtmlD
      *
      * @param string $selector
      *
-     * @return SimpleHtmlDomNodeInterface|null
+     * @return SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>|null
      */
     public function findOne(string $selector)
     {
@@ -93,7 +94,7 @@ class SimpleHtmlDomNode extends AbstractSimpleHtmlDomNode implements SimpleHtmlD
      *
      * @param string $selector
      *
-     * @return false|SimpleHtmlDomNodeInterface
+     * @return false|SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      */
     public function findOneOrFalse(string $selector)
     {
@@ -125,6 +126,8 @@ class SimpleHtmlDomNode extends AbstractSimpleHtmlDomNode implements SimpleHtmlD
 
     /**
      * alias for "$this->innerHtml()" (added for compatibly-reasons with v1.x)
+     *
+     * @return string[]
      */
     public function innertext()
     {
@@ -133,6 +136,8 @@ class SimpleHtmlDomNode extends AbstractSimpleHtmlDomNode implements SimpleHtmlD
 
     /**
      * alias for "$this->innerHtml()" (added for compatibly-reasons with v1.x)
+     *
+     * @return string[]
      */
     public function outertext()
     {

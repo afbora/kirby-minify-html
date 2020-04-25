@@ -46,6 +46,8 @@ namespace voku\helper;
  *                                           <p>Get dom node's outer html.</p>
  * @method string innerText()
  *                                           <p>Get dom node's inner html (alias for "innerHtml()").</p>
+ *
+ * @extends \IteratorAggregate<int, \DOMNode>
  */
 interface SimpleHtmlDomInterface extends \IteratorAggregate
 {
@@ -70,7 +72,7 @@ interface SimpleHtmlDomInterface extends \IteratorAggregate
      * @param string $selector
      * @param int    $idx
      *
-     * @return SimpleHtmlDomInterface|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface
+     * @return SimpleHtmlDomInterface|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      */
     public function __invoke($selector, $idx = null);
 
@@ -101,7 +103,7 @@ interface SimpleHtmlDomInterface extends \IteratorAggregate
      * @param string   $selector
      * @param int|null $idx
      *
-     * @return SimpleHtmlDomInterface|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface
+     * @return SimpleHtmlDomInterface|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      */
     public function find(string $selector, $idx = null);
 
@@ -110,7 +112,7 @@ interface SimpleHtmlDomInterface extends \IteratorAggregate
      *
      * @param string $selector
      *
-     * @return SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface
+     * @return SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      */
     public function findMulti(string $selector): SimpleHtmlDomNodeInterface;
 
@@ -119,7 +121,7 @@ interface SimpleHtmlDomInterface extends \IteratorAggregate
      *
      * @param string $selector
      *
-     * @return false|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface
+     * @return false|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      */
     public function findMultiOrFalse(string $selector);
 
@@ -151,7 +153,7 @@ interface SimpleHtmlDomInterface extends \IteratorAggregate
     /**
      * Returns an array of attributes.
      *
-     * @return array|null
+     * @return string[]|null
      */
     public function getAllAttributes();
 
@@ -169,7 +171,7 @@ interface SimpleHtmlDomInterface extends \IteratorAggregate
      *
      * @param string $class
      *
-     * @return SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface
+     * @return SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      */
     public function getElementByClass(string $class);
 
@@ -197,7 +199,7 @@ interface SimpleHtmlDomInterface extends \IteratorAggregate
      * @param string   $id
      * @param int|null $idx
      *
-     * @return SimpleHtmlDomInterface|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface
+     * @return SimpleHtmlDomInterface|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      */
     public function getElementsById(string $id, $idx = null);
 
@@ -207,7 +209,7 @@ interface SimpleHtmlDomInterface extends \IteratorAggregate
      * @param string   $name
      * @param int|null $idx
      *
-     * @return SimpleHtmlDomInterface|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface
+     * @return SimpleHtmlDomInterface|SimpleHtmlDomInterface[]|SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      */
     public function getElementsByTagName(string $name, $idx = null);
 
@@ -223,7 +225,7 @@ interface SimpleHtmlDomInterface extends \IteratorAggregate
      *
      * @see  http://php.net/manual/en/iteratoraggregate.getiterator.php
      *
-     * @return SimpleHtmlDomNodeInterface
+     * @return SimpleHtmlDomNodeInterface<SimpleHtmlDomInterface>
      *                           <p>
      *                              An instance of an object implementing <b>Iterator</b> or
      *                              <b>Traversable</b>
@@ -294,6 +296,13 @@ interface SimpleHtmlDomInterface extends \IteratorAggregate
      * @return SimpleHtmlDomInterface|null
      */
     public function nextSibling();
+
+    /**
+     * Returns the next sibling of node and it will ignore whitespace elements.
+     *
+     * @return SimpleHtmlDomInterface|null
+     */
+    public function nextNonWhitespaceSibling();
 
     /**
      * Returns the parent of node.

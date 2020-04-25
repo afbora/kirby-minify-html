@@ -5,6 +5,14 @@
 3: fix -> usage of special js template tags in the dom
 4: merge improvements from "ivopetkov/html5-dom-document-php -> length attribute
 5: merge improvements from "ivopetkov/html5-dom-document-php -> classList support
+6: add "nextNonWhitespaceSibling()"
+7: fix -> usage of "outerhtml"
+8: add support for "symfony/css-selector": ~5.0
+9: fix -> "save()" -> will use html() insteadof of innerHtml() now
+13: fix -> "val()" -> will now support hidden fields
+14: fix -> keep html comments, also at the beginning of the html input
+15: add "HtmlDomParser->overwriteTemplateLogicSyntaxInSpecialScriptTags()"
+16: add support for "text/x-handlebars-template"
 
 
 [PHP Simple HTML Dom v4.6.x]
