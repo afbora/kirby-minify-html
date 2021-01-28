@@ -1,8 +1,29 @@
-# Changelog 4.4.3 (20202-04-06)
+# Changelog 4.4.8 (2020-08-11) 
+
+- remove content before "<!doctype.*>", otherwise DOMDocument cannot handle the input
+- use a new version of "voku/simple_html_dom" (4.7.22)
+
+# Changelog 4.4.7 (2020-08-11) 
+
+- use a new version of "voku/simple_html_dom" (4.7.21)
+
+# Changelog 4.4.6 (2020-08-08)
+
+-  fix invalid input html
+
+# Changelog 4.4.5 (2020-08-06)
+
+- allow to configure special comments via "setSpecialHtmlComments()"
+
+# Changelog 4.4.4 (2020-08-06)
+
+- fix problems with self-closing-tags e.g. <wbr>
+
+# Changelog 4.4.3 (2020-04-06)
 
 - fix "domNodeClosingTagOptional()" -> fix logic of detecting next sibling dom node
 
-# Changelog 4.4.2 (20202-04-06)
+# Changelog 4.4.2 (2020-04-06)
 
 - fix "domNodeClosingTagOptional()" -> do not remove "</p>" if there is more content in the parent node
 

@@ -203,12 +203,22 @@ class HtmlMin implements HtmlMinInterface
     private $localDomains = [];
 
     /**
-     * @var array
+     * @var string[]
      */
     private $domainsToRemoveHttpPrefixFromAttributes = [
         'google.com',
         'google.de',
     ];
+
+    /**
+     * @var string[]
+     */
+    private $specialHtmlCommentsStaringWith = [];
+
+    /**
+     * @var string[]
+     */
+    private $specialHtmlCommentsEndingWith = [];
 
     /**
      * @var bool
@@ -1003,11 +1013,12 @@ class HtmlMin implements HtmlMinInterface
                 }
 
                 if (!$this->doRemoveWhitespaceAroundTags) {
-                    /** @noinspection NestedPositiveIfStatementsInspection */
+                    /** @var \DOMText|null $nextSiblingTmp - false-positive error from phpstan */
+                    $nextSiblingTmp = $child->nextSibling;
                     if (
-                        $child->nextSibling instanceof \DOMText
+                        $nextSiblingTmp instanceof \DOMText
                         &&
-                        $child->nextSibling->wholeText === ' '
+                        $nextSiblingTmp->wholeText === ' '
                     ) {
                         if (
                             $emptyStringTmp !== 'last_was_empty'
@@ -1462,7 +1473,7 @@ class HtmlMin implements HtmlMinInterface
     protected function getNextSiblingOfTypeDOMElement(\DOMNode $node)
     {
         do {
-            /** @var \DOMNode|null $nodeTmp - false-positive error from phpstan */
+            /** @var \DOMElement|\DOMText|null $nodeTmp - false-positive error from phpstan */
             $nodeTmp = $node->nextSibling;
 
             if ($nodeTmp instanceof \DOMText) {
@@ -1517,6 +1528,30 @@ class HtmlMin implements HtmlMinInterface
     }
 
     /**
+     * Check if the current string is an special comment.
+     *
+     * @param string $comment
+     *
+     * @return bool
+     */
+    private function isSpecialComment($comment): bool
+    {
+        foreach ($this->specialHtmlCommentsStaringWith as $search) {
+            if (\strpos($comment, $search) === 0) {
+                return true;
+            }
+        }
+
+        foreach ($this->specialHtmlCommentsEndingWith as $search) {
+            if (\substr($comment, -\strlen($search)) === $search) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param string $html
      * @param bool   $multiDecodeNewHtmlEntity
      *
@@ -1535,11 +1570,23 @@ class HtmlMin implements HtmlMinInterface
         $dom->getDocument()->preserveWhiteSpace = false; // remove redundant white space
         $dom->getDocument()->formatOutput = false; // do not formats output with indentation
 
+        // Remove content before <!DOCTYPE.*> because otherwise the DOMDocument can not handle the input.
+        if (\stripos($html, '<!DOCTYPE') !== false) {
+            /** @noinspection NestedPositiveIfStatementsInspection */
+            if (
+                \preg_match('/(^.*?)<!(?:DOCTYPE)(?: [^>]*)?>/sui', $html, $matches_before_doctype)
+                &&
+                \trim($matches_before_doctype[1])
+            ) {
+                $html = \str_replace($matches_before_doctype[1], '', $html);
+            }
+        }
+
         // load dom
         /** @noinspection UnusedFunctionResultInspection */
         $dom->loadHtml($html);
 
-        $this->withDocType = (\stripos(\ltrim($html), '<!DOCTYPE') === 0);
+        $this->withDocType = (\stripos($html, '<!DOCTYPE') === 0);
 
         $doctypeStr = $this->getDoctype($dom->getDocument());
 
@@ -1697,8 +1744,11 @@ class HtmlMin implements HtmlMinInterface
 
             $text = $element->text();
 
-            // skip normal comments
-            if (!$this->isConditionalComment($text)) {
+            if (
+                !$this->isConditionalComment($text)
+                &&
+                !$this->isSpecialComment($text)
+            ) {
                 continue;
             }
 
@@ -1795,13 +1845,27 @@ class HtmlMin implements HtmlMinInterface
     }
 
     /**
-     * @param array $domainsToRemoveHttpPrefixFromAttributes
+     * @param string[] $domainsToRemoveHttpPrefixFromAttributes
      *
      * @return $this
      */
     public function setDomainsToRemoveHttpPrefixFromAttributes($domainsToRemoveHttpPrefixFromAttributes): self
     {
         $this->domainsToRemoveHttpPrefixFromAttributes = $domainsToRemoveHttpPrefixFromAttributes;
+
+        return $this;
+    }
+
+    /**
+     * @param string[] $startingWith
+     * @param string[] $endingWith
+     *
+     * @return $this
+     */
+    public function setSpecialHtmlComments(array $startingWith, array $endingWith = []): self
+    {
+        $this->specialHtmlCommentsStaringWith = $startingWith;
+        $this->specialHtmlCommentsEndingWith = $endingWith;
 
         return $this;
     }
