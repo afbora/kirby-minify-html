@@ -24,8 +24,8 @@ class InstalledVersions
 private static $installed = array (
   'root' => 
   array (
-    'pretty_version' => '1.3.0',
-    'version' => '1.3.0.0',
+    'pretty_version' => '1.4.0',
+    'version' => '1.4.0.0',
     'aliases' => 
     array (
     ),
@@ -36,8 +36,8 @@ private static $installed = array (
   array (
     'afbora/kirby-minify-html' => 
     array (
-      'pretty_version' => '1.3.0',
-      'version' => '1.3.0.0',
+      'pretty_version' => '1.4.0',
+      'version' => '1.4.0.0',
       'aliases' => 
       array (
       ),
@@ -54,12 +54,12 @@ private static $installed = array (
     ),
     'symfony/css-selector' => 
     array (
-      'pretty_version' => 'v5.2.2',
-      'version' => '5.2.2.0',
+      'pretty_version' => 'v5.2.9',
+      'version' => '5.2.9.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'f65f217b3314504a1ec99c2d6ef69016bb13490f',
+      'reference' => '5d5f97809015102116208b976eb2edb44b689560',
     ),
     'voku/html-min' => 
     array (
@@ -72,12 +72,12 @@ private static $installed = array (
     ),
     'voku/simple_html_dom' => 
     array (
-      'pretty_version' => '4.7.28',
-      'version' => '4.7.28.0',
+      'pretty_version' => '4.7.29',
+      'version' => '4.7.29.0',
       'aliases' => 
       array (
       ),
-      'reference' => '78d5894c7f0facfb4fb6369af15b1a87baea958c',
+      'reference' => '079067c704b714b7c2813971297bb340307813e7',
     ),
   ),
 );

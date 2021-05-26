@@ -18,9 +18,13 @@ class MinifyHTML extends Template
 
             $options = option('afbora.kirby-minify-html.options', []);
 
-            foreach ($options as $option => $status) {
-                if (method_exists($htmlMin, $option)) {
-                    $htmlMin->{$option}((bool)$status);
+            foreach ($options as $option => $param) {
+                if (method_exists($htmlMin, $option) === true) {
+                    if ($param !== null) {
+                        $htmlMin->{$option}($param);
+                    } else {
+                        $htmlMin->{$option}();
+                    }
                 }
             }
 

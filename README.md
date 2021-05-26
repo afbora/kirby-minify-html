@@ -35,11 +35,17 @@ The default values of the package are:
 | doRemoveWhitespaceAroundTags | remove whitespace around tags (depends on "doOptimizeViaHtmlDomParser(true)") |
 | doOptimizeAttributes | optimize html attributes (depends on "doOptimizeViaHtmlDomParser(true)") |
 | doRemoveHttpPrefixFromAttributes | remove optional "http:"-prefix from attributes (depends on "doOptimizeAttributes(true)") |
+| doRemoveHttpsPrefixFromAttributes | remove optional "https:"-prefix from attributes (depends on "doOptimizeAttributes(true)") |
+| doKeepHttpAndHttpsPrefixOnExternalAttributes | keep "http:"- and "https:"-prefix for all external links |
+| doMakeSameDomainsLinksRelative | make some links relative, by removing the domain from attributes |
 | doRemoveDefaultAttributes | remove defaults (depends on "doOptimizeAttributes(true)" | disabled by default) |
 | doRemoveDeprecatedAnchorName | remove deprecated anchor-jump (depends on "doOptimizeAttributes(true)") |
 | doRemoveDeprecatedScriptCharsetAttribute | remove deprecated charset-attribute - the browser will use the charset from the HTTP-Header, anyway (depends on "doOptimizeAttributes(true)") |
 | doRemoveDeprecatedTypeFromScriptTag | remove deprecated script-mime-types (depends on "doOptimizeAttributes(true)") |
 | doRemoveDeprecatedTypeFromStylesheetLink | remove "type=text/css" for css links (depends on "doOptimizeAttributes(true)") |
+| doRemoveDeprecatedTypeFromStyleAndLinkTag | remove "type=text/css" from all links and styles |
+| doRemoveDefaultMediaTypeFromStyleAndLinkTag | remove "media="all" from all links and styles |
+| doRemoveDefaultTypeFromButton | remove type="submit" from button tags |
 | doRemoveEmptyAttributes | remove some empty attributes (depends on "doOptimizeAttributes(true)") |
 | doRemoveValueFromEmptyInput | remove 'value=""' from empty <input> (depends on "doOptimizeAttributes(true)") |
 | doSortCssClassNames | sort css-class-names, for better gzip results (depends on "doOptimizeAttributes(true)") |
@@ -63,8 +69,9 @@ https://github.com/voku/HtmlMin#options
 return [
     'afbora.kirby-minify-html.enabled' => true,
     'afbora.kirby-minify-html.options' => [
-        'doOptimizeViaHtmlDomParser' => true, // set true/false or remove line to default
-        'doRemoveSpacesBetweenTags'  => false // set true/false or remove line to default
+        'doOptimizeViaHtmlDomParser'     => true,
+        'doRemoveSpacesBetweenTags'      => false,
+        'doMakeSameDomainsLinksRelative' => ['example.com']
     ],
 ];
 ````
