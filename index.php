@@ -13,9 +13,11 @@ class MinifyHTML extends Template
     {
         $html = Tpl::load($this->file(), $data);
 
-        if (option('afbora.kirby-minify-html.enabled') === true) {
+        if (
+            option('afbora.kirby-minify-html.enabled') === true &&
+            $this->hasDefaultType() === true
+        ) {
             $htmlMin = new HtmlMin();
-
             $options = option('afbora.kirby-minify-html.options', []);
 
             foreach ($options as $option => $param) {
