@@ -1,7 +1,7 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.5.0',
-        'version' => '1.5.0.0',
+        'pretty_version' => '1.6.0',
+        'version' => '1.6.0.0',
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         'afbora/kirby-minify-html' => array(
-            'pretty_version' => '1.5.0',
-            'version' => '1.5.0.0',
+            'pretty_version' => '1.6.0',
+            'version' => '1.6.0.0',
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -29,12 +29,12 @@
             'dev_requirement' => false,
         ),
         'symfony/css-selector' => array(
-            'pretty_version' => 'v5.3.0',
-            'version' => '5.3.0.0',
+            'pretty_version' => 'v6.0.3',
+            'version' => '6.0.3.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/css-selector',
             'aliases' => array(),
-            'reference' => 'fcd0b29a7a0b1bb5bfbedc6231583d77fea04814',
+            'reference' => '1955d595c12c111629cc814d3f2a2ff13580508a',
             'dev_requirement' => false,
         ),
         'voku/html-min' => array(
@@ -47,12 +47,12 @@
             'dev_requirement' => false,
         ),
         'voku/simple_html_dom' => array(
-            'pretty_version' => '4.7.29',
-            'version' => '4.7.29.0',
+            'pretty_version' => '4.7.31',
+            'version' => '4.7.31.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../voku/simple_html_dom',
             'aliases' => array(),
-            'reference' => '079067c704b714b7c2813971297bb340307813e7',
+            'reference' => '2bc2f89d9124bd2fd4817c73facf29a8b5be3c97',
             'dev_requirement' => false,
         ),
     ),

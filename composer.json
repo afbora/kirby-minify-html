@@ -1,32 +1,32 @@
 {
-    "name": "afbora/kirby-minify-html",
-    "description": "Enable minify HTML output for Kirby 3",
-    "keywords": [
-        "kirby",
-        "kirby-3",
-        "kirby-cms",
-        "kirby3-plugin",
-        "kirby-plugin"
-    ],
-    "version": "1.5.0",
-    "type": "kirby-plugin",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Ahmet Bora",
-            "email": "ahmet.bora@pixelturk.net"
-        }
-    ],
-    "require": {
-        "php": "^7.3|^8.0",
-        "getkirby/composer-installer": "^1.2",
-        "voku/html-min": "^4.4"
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+  "name": "afbora/kirby-minify-html",
+  "description": "Enable minify HTML output for Kirby 3",
+  "keywords": [
+    "kirby",
+    "kirby-3",
+    "kirby-cms",
+    "kirby3-plugin",
+    "kirby-plugin"
+  ],
+  "version": "1.6.0",
+  "type": "kirby-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ahmet Bora",
+      "email": "ahmet.bora@pixelturk.net"
+    }
+  ],
+  "require": {
+    "php": "^7.4|^8.0",
+    "getkirby/composer-installer": "^1.2",
+    "voku/html-min": "^4.4"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
