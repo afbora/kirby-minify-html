@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/voku/HtmlMin.svg?branch=master)](https://travis-ci.org/voku/HtmlMin)
+[![Build Status](https://github.com/voku/HtmlMin/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/voku/HtmlMin/actions)
 [![Coverage Status](https://coveralls.io/repos/github/voku/HtmlMin/badge.svg?branch=master)](https://coveralls.io/github/voku/HtmlMin?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a433ed2b3b7546b3a1c520310222a601)](https://www.codacy.com/app/voku/HtmlMin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=voku/HtmlMin&amp;utm_campaign=Badge_Grade)
 [![Latest Stable Version](https://poser.pugx.org/voku/html-min/v/stable)](https://packagist.org/packages/voku/html-min) 
@@ -92,7 +92,7 @@ PS: you can use the "nocompress"-tag to keep the html e.g.: "<nocompress>\n foob
 1) [Composer](https://getcomposer.org) is a prerequisite for running the tests.
 
 ```
-composer install voku/html-min
+composer require voku/html-min
 ```
 
 2) The tests can be executed by running this command from the root directory:

@@ -2,23 +2,27 @@
 
 @include_once __DIR__ . '/vendor/autoload.php';
 
-use Kirby\Toolkit\Tpl;
-use Kirby\Cms\Template;
 use Kirby\Cms\App as Kirby;
+use Kirby\Cms\Template;
 use voku\helper\HtmlMin;
 
 class MinifyHTML extends Template
 {
+    /**
+     * @param array $data
+     * @return string
+     */
     public function render(array $data = []): string
     {
-        $html = Tpl::load($this->file(), $data);
+        $kirby = Kirby::instance();
+        $html = parent::render($data);
 
         if (
-            option('afbora.kirby-minify-html.enabled') === true &&
+            $kirby->option('afbora.kirby-minify-html.enabled') === true &&
             $this->hasDefaultType() === true
         ) {
             $htmlMin = new HtmlMin();
-            $options = option('afbora.kirby-minify-html.options', []);
+            $options = $kirby->option('afbora.kirby-minify-html.options', []);
 
             foreach ($options as $option => $param) {
                 if (method_exists($htmlMin, $option) === true) {
@@ -43,8 +47,8 @@ Kirby::plugin('afbora/kirby-minify-html', [
         'options' => []
     ],
     'components' => [
-        'template' => function (Kirby $kirby, string $name, string $contentType = null) {
-            return new MinifyHTML($name, $contentType);
+        'template' => function (Kirby $kirby, string $name, string $type = 'html', string $defaultType = 'html') {
+            return new MinifyHTML($name, $type, $defaultType);
         }
     ]
 ]);

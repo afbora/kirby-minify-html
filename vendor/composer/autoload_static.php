@@ -101,6 +101,7 @@ class ComposerStaticInitb347d04a24e66ed035d9a7739784b824
         'voku\\helper\\AbstractSimpleXmlDom' => __DIR__ . '/..' . '/voku/simple_html_dom/src/voku/helper/AbstractSimpleXmlDom.php',
         'voku\\helper\\AbstractSimpleXmlDomNode' => __DIR__ . '/..' . '/voku/simple_html_dom/src/voku/helper/AbstractSimpleXmlDomNode.php',
         'voku\\helper\\DomParserInterface' => __DIR__ . '/..' . '/voku/simple_html_dom/src/voku/helper/DomParserInterface.php',
+        'voku\\helper\\HtmlDomHelper' => __DIR__ . '/..' . '/voku/simple_html_dom/src/voku/helper/HtmlDomHelper.php',
         'voku\\helper\\HtmlDomParser' => __DIR__ . '/..' . '/voku/simple_html_dom/src/voku/helper/HtmlDomParser.php',
         'voku\\helper\\HtmlMin' => __DIR__ . '/..' . '/voku/html-min/src/voku/helper/HtmlMin.php',
         'voku\\helper\\HtmlMinDomObserverInterface' => __DIR__ . '/..' . '/voku/html-min/src/voku/helper/HtmlMinDomObserverInterface.php',

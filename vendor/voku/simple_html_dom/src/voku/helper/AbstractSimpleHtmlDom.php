@@ -20,6 +20,7 @@ abstract class AbstractSimpleHtmlDom
         'outerhtml'    => 'html',
         'innertext'    => 'innerHtml',
         'innerhtml'    => 'innerHtml',
+        'innerhtmlkeep'    => 'innerHtmlKeep',
     ];
 
     /**
@@ -69,11 +70,13 @@ abstract class AbstractSimpleHtmlDom
             case 'innerhtml':
             case 'innertext':
                 return $this->innerHtml();
+            case 'innerhtmlkeep':
+                return $this->innerHtml(false, false);
             case 'text':
             case 'plaintext':
                 return $this->text();
             case 'tag':
-                return $this->node ? $this->node->nodeName : '';
+                return $this->node->nodeName ?? '';
             case 'attr':
                 return $this->getAllAttributes();
             case 'classlist':
@@ -121,6 +124,7 @@ abstract class AbstractSimpleHtmlDom
             case 'outerhtml':
             case 'innertext':
             case 'innerhtml':
+            case 'innerhtmlkeep':
             case 'plaintext':
             case 'text':
             case 'tag':
@@ -152,6 +156,8 @@ abstract class AbstractSimpleHtmlDom
             case 'innertext':
             case 'innerhtml':
                 return $this->replaceChildWithString($value);
+            case 'innerhtmlkeep':
+                return $this->replaceChildWithString($value, false);
             case 'plaintext':
                 return $this->replaceTextWithString($value);
             case 'classlist':
@@ -160,6 +166,11 @@ abstract class AbstractSimpleHtmlDom
                 // no break
             default:
                 if ($this->node && \property_exists($this->node, $nameOrig)) {
+                    // INFO: Cannot assign null to property DOMNode::* of type string
+                    if ($nameOrig === 'prefix' || $nameOrig === 'textContent') {
+                        $value = (string)$value;
+                    }
+
                     return $this->node->{$nameOrig} = $value;
                 }
 
@@ -205,11 +216,11 @@ abstract class AbstractSimpleHtmlDom
 
     abstract public function html(bool $multiDecodeNewHtmlEntity = false): string;
 
-    abstract public function innerHtml(bool $multiDecodeNewHtmlEntity = false): string;
+    abstract public function innerHtml(bool $multiDecodeNewHtmlEntity = false, bool $putBrokenReplacedBack = true): string;
 
     abstract public function removeAttribute(string $name): SimpleHtmlDomInterface;
 
-    abstract protected function replaceChildWithString(string $string): SimpleHtmlDomInterface;
+    abstract protected function replaceChildWithString(string $string, bool $putBrokenReplacedBack = true): SimpleHtmlDomInterface;
 
     abstract protected function replaceNodeWithString(string $string): SimpleHtmlDomInterface;
 

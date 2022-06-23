@@ -1,3 +1,18 @@
+# Changelog 4.5.0 (2022-06-09)
+
+- added possibility overwrite special script tags on minify process (thanks @hryvinskyi)
+- fix some PHP 8.1 type errors
+
+# Changelog 4.4.10 (2022-03-13)
+
+- use a new version of "voku/simple_html_dom" (4.8.5)
+- phpstan reported errors fixed
+
+# Changelog 4.4.9 (2022-03-09)
+
+- optimize regex for gigantic inputs
+- use a new version of "voku/simple_html_dom" (4.8.4)
+
 # Changelog 4.4.8 (2020-08-11) 
 
 - remove content before "<!doctype.*>", otherwise DOMDocument cannot handle the input
