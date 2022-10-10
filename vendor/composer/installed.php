@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'afbora/kirby-minify-html',
-        'pretty_version' => '1.7.0',
-        'version' => '1.7.0.0',
+        'pretty_version' => '1.7.1',
+        'version' => '1.7.1.0',
         'reference' => NULL,
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         'afbora/kirby-minify-html' => array(
-            'pretty_version' => '1.7.0',
-            'version' => '1.7.0.0',
+            'pretty_version' => '1.7.1',
+            'version' => '1.7.1.0',
             'reference' => NULL,
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'symfony/css-selector' => array(
-            'pretty_version' => 'v6.0.3',
-            'version' => '6.0.3.0',
-            'reference' => '1955d595c12c111629cc814d3f2a2ff13580508a',
+            'pretty_version' => 'v6.0.11',
+            'version' => '6.0.11.0',
+            'reference' => 'ab2746acddc4f03a7234c8441822ac5d5c63efe9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/css-selector',
             'aliases' => array(),
