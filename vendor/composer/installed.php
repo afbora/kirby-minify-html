@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'afbora/kirby-minify-html',
-        'pretty_version' => '1.7.1',
-        'version' => '1.7.1.0',
+        'pretty_version' => '2.0.0',
+        'version' => '2.0.0.0',
         'reference' => NULL,
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         'afbora/kirby-minify-html' => array(
-            'pretty_version' => '1.7.1',
-            'version' => '1.7.1.0',
+            'pretty_version' => '2.0.0',
+            'version' => '2.0.0.0',
             'reference' => NULL,
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',
