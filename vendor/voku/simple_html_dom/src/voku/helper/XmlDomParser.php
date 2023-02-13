@@ -143,10 +143,11 @@ class XmlDomParser extends AbstractDomParser
      *
      * @param string   $xml
      * @param int|null $libXMLExtraOptions
+     * @param bool     $useDefaultLibXMLOptions
      *
      * @return \DOMDocument
      */
-    protected function createDOMDocument(string $xml, $libXMLExtraOptions = null): \DOMDocument
+    protected function createDOMDocument(string $xml, $libXMLExtraOptions = null, $useDefaultLibXMLOptions = true): \DOMDocument
     {
         if ($this->callbackBeforeCreateDom) {
             $xml = \call_user_func($this->callbackBeforeCreateDom, $xml, $this);
@@ -159,14 +160,17 @@ class XmlDomParser extends AbstractDomParser
         }
         \libxml_clear_errors();
 
-        $optionsXml = \LIBXML_DTDLOAD | \LIBXML_DTDATTR | \LIBXML_NONET;
+        $optionsXml = 0;
+        if ($useDefaultLibXMLOptions) {
+            $optionsXml = \LIBXML_DTDLOAD | \LIBXML_DTDATTR | \LIBXML_NONET;
 
-        if (\defined('LIBXML_BIGLINES')) {
-            $optionsXml |= \LIBXML_BIGLINES;
-        }
+            if (\defined('LIBXML_BIGLINES')) {
+                $optionsXml |= \LIBXML_BIGLINES;
+            }
 
-        if (\defined('LIBXML_COMPACT')) {
-            $optionsXml |= \LIBXML_COMPACT;
+            if (\defined('LIBXML_COMPACT')) {
+                $optionsXml |= \LIBXML_COMPACT;
+            }
         }
 
         if ($libXMLExtraOptions !== null) {
@@ -389,7 +393,7 @@ class XmlDomParser extends AbstractDomParser
      */
     public function getElementByClass(string $class): SimpleXmlDomNodeInterface
     {
-        return $this->findMulti(".${class}");
+        return $this->findMulti(".{$class}");
     }
 
     /**
@@ -401,7 +405,7 @@ class XmlDomParser extends AbstractDomParser
      */
     public function getElementById(string $id): SimpleXmlDomInterface
     {
-        return $this->findOne("#${id}");
+        return $this->findOne("#{$id}");
     }
 
     /**
@@ -432,7 +436,7 @@ class XmlDomParser extends AbstractDomParser
      */
     public function getElementsById(string $id, $idx = null)
     {
-        return $this->find("#${id}", $idx);
+        return $this->find("#{$id}", $idx);
     }
 
     /**
@@ -526,7 +530,7 @@ class XmlDomParser extends AbstractDomParser
             &&
             !\file_exists($filePath)
         ) {
-            throw new \RuntimeException("File ${filePath} not found");
+            throw new \RuntimeException("File {$filePath} not found");
         }
 
         try {
@@ -536,11 +540,11 @@ class XmlDomParser extends AbstractDomParser
                 $html = \file_get_contents($filePath);
             }
         } catch (\Exception $e) {
-            throw new \RuntimeException("Could not load file ${filePath}");
+            throw new \RuntimeException("Could not load file {$filePath}");
         }
 
         if ($html === false) {
-            throw new \RuntimeException("Could not load file ${filePath}");
+            throw new \RuntimeException("Could not load file {$filePath}");
         }
 
         return $this->loadHtml($html, $libXMLExtraOptions);
@@ -576,12 +580,13 @@ class XmlDomParser extends AbstractDomParser
      *
      * @param string   $xml
      * @param int|null $libXMLExtraOptions
+     * @param bool     $useDefaultLibXMLOptions
      *
      * @return $this
      */
-    public function loadXml(string $xml, $libXMLExtraOptions = null): self
+    public function loadXml(string $xml, $libXMLExtraOptions = null, $useDefaultLibXMLOptions = true): self
     {
-        $this->document = $this->createDOMDocument($xml, $libXMLExtraOptions);
+        $this->document = $this->createDOMDocument($xml, $libXMLExtraOptions, $useDefaultLibXMLOptions);
 
         return $this;
     }
@@ -591,19 +596,20 @@ class XmlDomParser extends AbstractDomParser
      *
      * @param string   $filePath
      * @param int|null $libXMLExtraOptions
+     * @param bool     $useDefaultLibXMLOptions
      *
      * @throws \RuntimeException
      *
      * @return $this
      */
-    public function loadXmlFile(string $filePath, $libXMLExtraOptions = null): self
+    public function loadXmlFile(string $filePath, $libXMLExtraOptions = null, $useDefaultLibXMLOptions = true): self
     {
         if (
             !\preg_match("/^https?:\/\//i", $filePath)
             &&
             !\file_exists($filePath)
         ) {
-            throw new \RuntimeException("File ${filePath} not found");
+            throw new \RuntimeException("File {$filePath} not found");
         }
 
         try {
@@ -613,14 +619,14 @@ class XmlDomParser extends AbstractDomParser
                 $xml = \file_get_contents($filePath);
             }
         } catch (\Exception $e) {
-            throw new \RuntimeException("Could not load file ${filePath}");
+            throw new \RuntimeException("Could not load file {$filePath}");
         }
 
         if ($xml === false) {
-            throw new \RuntimeException("Could not load file ${filePath}");
+            throw new \RuntimeException("Could not load file {$filePath}");
         }
 
-        return $this->loadXml($xml, $libXMLExtraOptions);
+        return $this->loadXml($xml, $libXMLExtraOptions, $useDefaultLibXMLOptions);
     }
 
     /**
