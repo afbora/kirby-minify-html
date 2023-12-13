@@ -1,6 +1,6 @@
 # Kirby Minify HTML
 
-Enable minify HTML output for Kirby 3
+Enable minify HTML output for Kirby 3 and 4.
 
 ## Installation
 
