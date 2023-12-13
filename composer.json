@@ -1,12 +1,14 @@
 {
   "name": "afbora/kirby-minify-html",
-  "description": "Enable minify HTML output for Kirby 3.",
-  "version": "2.0.0",
+  "description": "Enable minify HTML output for Kirby 3 and 4.",
+  "version": "2.1.0",
   "keywords": [
     "kirby",
     "kirby-3",
+    "kirby-4",
     "kirby-cms",
     "kirby3-plugin",
+    "kirby4-plugin",
     "kirby-plugin"
   ],
   "type": "kirby-plugin",
