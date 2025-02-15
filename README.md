@@ -67,11 +67,17 @@ https://github.com/voku/HtmlMin#options
 
 ````php
 return [
-    'afbora.kirby-minify-html.enabled' => true,
-    'afbora.kirby-minify-html.options' => [
-        'doOptimizeViaHtmlDomParser'     => true,
-        'doRemoveSpacesBetweenTags'      => false,
-        'doMakeSameDomainsLinksRelative' => ['example.com']
-    ],
+    'afbora.kirby-minify-html' => [
+        'enabled' => true,
+        'ignore' => [
+            'sitemap',
+            'rss'
+        ],
+        'options' => [
+            'doOptimizeViaHtmlDomParser'     => true,
+            'doRemoveSpacesBetweenTags'      => false,
+            'doMakeSameDomainsLinksRelative' => ['example.com']
+        ]
+    ]
 ];
 ````
