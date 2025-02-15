@@ -12,40 +12,38 @@
 namespace Symfony\Component\CssSelector\Node;
 
 /**
- * Represents a "<selector>#<id>" node.
+ * Represents a "<selector>:where(<subSelectorList>)" node.
  *
  * This component is a port of the Python cssselect library,
  * which is copyright Ian Bicking, @see https://github.com/SimonSapin/cssselect.
  *
- * @author Jean-François Simon <jeanfrancois.simon@sensiolabs.com>
+ * @author Hubert Lenoir <lenoir.hubert@gmail.com>
  *
  * @internal
  */
-class HashNode extends AbstractNode
+class SpecificityAdjustmentNode extends AbstractNode
 {
+    /**
+     * @param array<NodeInterface> $arguments
+     */
     public function __construct(
-        private NodeInterface $selector,
-        private string $id,
+        public readonly NodeInterface $selector,
+        public readonly array $arguments = [],
     ) {
-    }
-
-    public function getSelector(): NodeInterface
-    {
-        return $this->selector;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
     }
 
     public function getSpecificity(): Specificity
     {
-        return $this->selector->getSpecificity()->plus(new Specificity(1, 0, 0));
+        return $this->selector->getSpecificity();
     }
 
     public function __toString(): string
     {
-        return \sprintf('%s[%s#%s]', $this->getNodeName(), $this->selector, $this->id);
+        $selectorArguments = array_map(
+            fn ($n) => ltrim((string) $n, '*'),
+            $this->arguments,
+        );
+
+        return \sprintf('%s[%s:where(%s)]', $this->getNodeName(), $this->selector, implode(', ', $selectorArguments));
     }
 }
