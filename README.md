@@ -20,10 +20,11 @@ git submodule add https://github.com/afbora/kirby-minify-html.git site/plugins/k
 
 The default values of the package are:
 
-| Option | Default | Values | Description |
-|:--|:--|:--|:--|
-| afbora.kirby-minify-html.enabled | true | boolean | Enable/disable minify |
-| afbora.kirby-minify-html.options | [] | array | Minify options * |
+| Option                           | Default | Values  | Description                                 |
+|:---------------------------------|:--------|:--------|:--------------------------------------------|
+| afbora.kirby-minify-html.enabled | true    | boolean | Enable/disable minify                       |
+| afbora.kirby-minify-html.ignore  | []      | array   | Ignore minifying for the selected templates |
+| afbora.kirby-minify-html.options | []      | array   | Minify options *                            |
 
 ### Available Minify Options
 
