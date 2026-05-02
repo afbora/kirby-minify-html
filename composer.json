@@ -1,7 +1,7 @@
 {
   "name": "afbora/kirby-minify-html",
   "description": "Enable minify HTML output for Kirby",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "keywords": [
     "kirby3",
     "kirby4",
@@ -22,7 +22,7 @@
   "require": {
     "php": "^8.0",
     "getkirby/composer-installer": "^1.2",
-    "voku/html-min": "^4.5"
+    "voku/html-min": "^5.0"
   },
   "config": {
     "optimize-autoloader": true,

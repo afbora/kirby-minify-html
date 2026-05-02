@@ -41,8 +41,19 @@ class ComposerStaticInitb347d04a24e66ed035d9a7739784b824
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'J' => 
+        array (
+            'JShrink' => 
+            array (
+                0 => __DIR__ . '/..' . '/tedivm/jshrink/src',
+            ),
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'JShrink\\Minifier' => __DIR__ . '/..' . '/tedivm/jshrink/src/JShrink/Minifier.php',
         'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
         'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
@@ -132,6 +143,7 @@ class ComposerStaticInitb347d04a24e66ed035d9a7739784b824
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitb347d04a24e66ed035d9a7739784b824::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitb347d04a24e66ed035d9a7739784b824::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitb347d04a24e66ed035d9a7739784b824::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitb347d04a24e66ed035d9a7739784b824::$classMap;
 
         }, null, ClassLoader::class);
