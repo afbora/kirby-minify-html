@@ -1,11 +1,12 @@
 {
   "name": "afbora/kirby-minify-html",
   "description": "Enable minify HTML output for Kirby",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "keywords": [
     "kirby3",
     "kirby4",
-    "kirby5"
+    "kirby5",
+    "kirby6"
   ],
   "type": "kirby-plugin",
   "license": "MIT",
@@ -20,7 +21,7 @@
     "email": "ahmet@getkirby.com"
   },
   "require": {
-    "php": "^8.0",
+    "php": "^8.2",
     "getkirby/composer-installer": "^1.2",
     "voku/html-min": "^5.0"
   },
@@ -35,6 +36,10 @@
       "php": "8.2.0"
     }
   },
-  "minimum-stability": "dev",
+  "extra": {
+    "kirby": {
+      "compatible": "^3.9 || ^4.0 || ^5.0 || ^6.0"
+    }
+  },
   "prefer-stable": true
 }
