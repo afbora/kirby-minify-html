@@ -16,7 +16,8 @@ class MinifyHTML extends Template
         if (
             $kirby->option('afbora.kirby-minify-html.enabled') === true &&
             in_array($this->name(), $kirby->option('afbora.kirby-minify-html.ignore', [])) === false &&
-            $this->hasDefaultType() === true
+            $this->hasDefaultType() === true &&
+            $this->type() === 'html'
         ) {
             $htmlMin = new HtmlMin();
             $htmlMin->setSpecialHtmlComments(['kirby-stack:']);
