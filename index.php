@@ -19,6 +19,7 @@ class MinifyHTML extends Template
             $this->hasDefaultType() === true
         ) {
             $htmlMin = new HtmlMin();
+            $htmlMin->setSpecialHtmlComments(['kirby-stack:']);
             $options = $kirby->option('afbora.kirby-minify-html.options', []);
 
             foreach ($options as $option => $param) {
