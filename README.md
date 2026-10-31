@@ -1,3 +1,5 @@
+![Kirby Minify HTML](.github/cover.png)
+
 # Kirby Minify HTML
 
 Enable minify HTML output for Kirby.
